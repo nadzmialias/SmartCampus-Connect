@@ -31,6 +31,15 @@ public class StudentController {
     return new ResponseEntity<>(studentDb.values(), HttpStatus.OK);
   }
 
+  // 6. READ SINGLE (By ID in URL)
+  @GetMapping("/{id}")
+  public ResponseEntity<Student> getStudentById(@PathVariable String id) {
+    if (studentDb.containsKey(id)) {
+      return new ResponseEntity<>(studentDb.get(id), HttpStatus.OK);
+    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+
   // 3. SEARCH (By ID or Name)
   @GetMapping("/search")
   public ResponseEntity<Collection<Student>> searchStudents(@RequestParam String query) {
