@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -48,11 +50,21 @@ public class EnrolmentController {
             try {
                 ResponseEntity<String> profileResponse = restTemplate.getForEntity(
                         "http://localhost:8081/api/students/" + studentId, String.class);
-                if (!profileResponse.getStatusCode().is2xxSuccessful()) {
-                    return new ResponseEntity<>("Enrolment failed: Student ID not found.", HttpStatus.BAD_REQUEST);
+                        
+            } catch (HttpClientErrorException e) {
+                // This catches 4xx errors (like 404 Not Found) thrown by the Profile Service
+                if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+                    return new ResponseEntity<>("Enrolment failed: Student ID not found in Profile Service.", HttpStatus.BAD_REQUEST);
                 }
-            } catch (Exception e) {
+                return new ResponseEntity<>("Enrolment failed: Invalid request to Profile Service.", HttpStatus.BAD_REQUEST);
+                
+            } catch (ResourceAccessException e) {
+                // This catches actual connection failures (i.e., Port 8081 is actually turned off)
                 return new ResponseEntity<>("Enrolment failed: Profile Service offline.", HttpStatus.SERVICE_UNAVAILABLE);
+                
+            } catch (Exception e) {
+                // Catch-all for anything else
+                return new ResponseEntity<>("Enrolment failed: Unexpected system error.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
             // Check Course Capacity

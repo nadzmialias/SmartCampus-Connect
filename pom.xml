@@ -25,5 +25,6 @@
         <module>course-enrolment</module>
         <module>notification</module>
         <module>library-booking</module>
+        <module>reporting-analytics</module>
     </modules>
 </project>

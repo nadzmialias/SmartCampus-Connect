@@ -6,13 +6,22 @@ services:
     ports:
       - "3306:3306"
     environment:
-      # Mimics the default XAMPP setup (root user, no password)
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_ROOT_PASSWORD: ""
     volumes:
       - db_data:/var/lib/mysql
-      # Maps an initialization script to automatically create your isolated databases
       - ./db-init:/docker-entrypoint-initdb.d
+
+  activemq:
+    image: apache/activemq-classic:latest
+    container_name: smartcampus_activemq
+    restart: always
+    ports:
+      - "61616:61616" # The connection port defined in application.properties
+      - "8161:8161"   # The Admin Web Console
+    environment:
+      - ACTIVEMQ_ADMIN_PASSWORD=admin
+      - ACTIVEMQ_USER_PASSWORD=admin
 
 volumes:
   db_data:
