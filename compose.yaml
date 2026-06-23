@@ -1,0 +1,18 @@
+services:
+  campus-db:
+    image: mariadb:10.4
+    container_name: smartcampus_mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      # Mimics the default XAMPP setup (root user, no password)
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_ROOT_PASSWORD: ""
+    volumes:
+      - db_data:/var/lib/mysql
+      # Maps an initialization script to automatically create your isolated databases
+      - ./db-init:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:

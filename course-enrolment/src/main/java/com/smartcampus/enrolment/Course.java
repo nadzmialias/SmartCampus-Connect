@@ -1,32 +1,43 @@
 package com.smartcampus.enrolment;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "courses")
 public class Course {
-  private String courseId;
-  private String name;
-  private int capacity;
+    
+    @Id
+    @Column(name = "course_id", nullable = false, unique = true)
+    private String courseId;
 
-  // Getters and Setters
-  public String getCourseId() {
-    return courseId;
-  }
+    @Column(name = "name", nullable = false)
+    private String name;
 
-  public void setCourseId(String courseId) {
-    this.courseId = courseId;
-  }
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
 
-  public String getName() {
-    return name;
-  }
+    // Getters and Setters
+    public String getCourseId() {
+        return courseId;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
 
-  public int getCapacity() {
-    return capacity;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setCapacity(int capacity) {
-    this.capacity = capacity;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 }
