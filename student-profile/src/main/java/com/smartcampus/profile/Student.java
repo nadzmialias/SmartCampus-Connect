@@ -13,6 +13,9 @@ public class Student {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "faculty")
     private String faculty;
 
@@ -31,6 +34,14 @@ public class Student {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFaculty() {
