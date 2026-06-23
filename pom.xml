@@ -24,5 +24,6 @@
         <module>student-profile</module>
         <module>course-enrolment</module>
         <module>notification</module>
+        <module>library-booking</module>
     </modules>
 </project>
