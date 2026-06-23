@@ -1,31 +1,54 @@
 package com.smartcampus.profile;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "students")
 public class Student {
-  private String studentId;
-  private String name;
-  private String faculty;
+    
+    @Id
+    @Column(name = "student_id", nullable = false, unique = true)
+    private String studentId;
 
-  public String getStudentId() {
-    return studentId;
-  }
+    @Column(name = "name", nullable = false)
+    private String name;
 
-  public void setStudentId(String studentId) {
-    this.studentId = studentId;
-  }
+    @Column(name = "email")
+    private String email;
 
-  public String getName() {
-    return name;
-  }
+    @Column(name = "faculty")
+    private String faculty;
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    // Getters and Setters
+    public String getStudentId() {
+        return studentId;
+    }
 
-  public String getFaculty() {
-    return faculty;
-  }
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
 
-  public void setFaculty(String faculty) {
-    this.faculty = faculty;
-  }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
 }
