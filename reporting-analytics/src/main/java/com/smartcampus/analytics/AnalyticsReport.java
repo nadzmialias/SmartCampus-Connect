@@ -14,8 +14,9 @@ public class AnalyticsReport {
     private LocalDateTime reportGeneratedAt;
     private int totalRegisteredStudents;
     private int totalCoursesOffered;
-    
-    public AnalyticsReport() {}
+
+    public AnalyticsReport() {
+    }
 
     public AnalyticsReport(int totalRegisteredStudents, int totalCoursesOffered) {
         this.reportGeneratedAt = LocalDateTime.now();
@@ -23,9 +24,19 @@ public class AnalyticsReport {
         this.totalCoursesOffered = totalCoursesOffered;
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public LocalDateTime getReportGeneratedAt() { return reportGeneratedAt; }
-    public int getTotalRegisteredStudents() { return totalRegisteredStudents; }
-    public int getTotalCoursesOffered() { return totalCoursesOffered; }
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getReportGeneratedAt() {
+        return reportGeneratedAt;
+    }
+
+    public int getTotalRegisteredStudents() {
+        return totalRegisteredStudents;
+    }
+
+    public int getTotalCoursesOffered() {
+        return totalCoursesOffered;
+    }
 }

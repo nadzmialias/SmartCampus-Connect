@@ -24,7 +24,7 @@ public class EnrolmentController {
     private final JmsTemplate jmsTemplate;
     // private final RestTemplate restTemplate = new RestTemplate();
     private final RestTemplate restTemplate = createTimeoutRestTemplate();
-    private final Lock enrolLock = new ReentrantLock(); // Protects concurrency
+    private final Lock enrolLock = new ReentrantLock();
 
     @Autowired
     private CourseRepository courseRepository;
@@ -38,8 +38,8 @@ public class EnrolmentController {
 
     private RestTemplate createTimeoutRestTemplate() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(3000); // 3 seconds to establish connection
-        factory.setReadTimeout(3000); // 3 seconds to wait for data
+        factory.setConnectTimeout(3000);
+        factory.setReadTimeout(3000);
         return new RestTemplate(factory);
     }
 

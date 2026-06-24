@@ -6,14 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class NotificationListener {
 
-    // FIXED: Matched the exact queue name from the Enrolment service
     @JmsListener(destination = "enrolmentQueue")
     public void receiveMessage(String message) {
         System.out.println("\n==================================================");
         System.out.println("🔔 [NOTIFICATION BROKER] System Event Received");
         System.out.println("==================================================");
 
-        // 1. Template for Student Enrolment
+        // Template for Student Enrolment
         if (message.startsWith("ENROLMENT_SUCCESS")) {
             String[] parts = message.split(":");
             String studentId = parts[1];
@@ -25,7 +24,7 @@ public class NotificationListener {
             System.out.println("Body       : Congratulations! You are officially enrolled in " + courseId + ".");
         }
 
-        // 2. Template for Registrar Adding Seats
+        // Template for Registrar Adding Seats
         else if (message.startsWith("SEAT_ALLOCATION")) {
             String[] parts = message.split(":");
             String courseId = parts[1];
@@ -39,7 +38,7 @@ public class NotificationListener {
                     + ". Total capacity is now " + totalSeats + ".");
         }
 
-        // 3. Fallback for unexpected messages
+        // Fallback for unexpected messages
         else {
             System.out.println("Event Type : UNKNOWN EVENT");
             System.out.println("Payload    : " + message);

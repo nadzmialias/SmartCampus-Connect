@@ -8,7 +8,7 @@ public class EnrolmentRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Auto-incrementing primary key
+    private Long id;
 
     @Column(name = "student_id", nullable = false)
     private String studentId;
@@ -16,19 +16,35 @@ public class EnrolmentRecord {
     @Column(name = "course_id", nullable = false)
     private String courseId;
 
-    // Empty constructor required by JPA
-    public EnrolmentRecord() {}
+    public EnrolmentRecord() {
+    }
 
     public EnrolmentRecord(String studentId, String courseId) {
         this.studentId = studentId;
         this.courseId = courseId;
     }
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getStudentId() { return studentId; }
-    public void setStudentId(String studentId) { this.studentId = studentId; }
-    public String getCourseId() { return courseId; }
-    public void setCourseId(String courseId) { this.courseId = courseId; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
 }

@@ -10,47 +10,47 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/students")
 public class StudentController {
 
-    // Injecting the REAL database connection
     @Autowired
     private StudentRepository studentRepository;
 
-    // 1. CREATE
+    // CREATE
     @PostMapping
     public ResponseEntity<Student> registerStudent(@RequestBody Student student) {
-    	if (studentRepository.existsById(student.getStudentId())) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Student with ID " + student.getStudentId() + " already exists.");
+        if (studentRepository.existsById(student.getStudentId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Student with ID " + student.getStudentId() + " already exists.");
         }
-    	// JPA automatically writes the INSERT SQL statement
         Student savedStudent = studentRepository.save(student);
         return new ResponseEntity<>(savedStudent, HttpStatus.CREATED);
     }
 
-    // 2. READ ALL
+    // READ ALL
     @GetMapping
     public ResponseEntity<List<Student>> getAllStudents() {
         return new ResponseEntity<>(studentRepository.findAll(), HttpStatus.OK);
     }
 
-    // 6. READ SINGLE (By ID in URL)
+    // READ SINGLE (By ID in URL)
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable String id) {
         Optional<Student> student = studentRepository.findById(id);
         return student.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                      .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // 3. SEARCH (By ID or Name)
+    // SEARCH (By ID or Name)
     @GetMapping("/search")
     public ResponseEntity<List<Student>> searchStudents(@RequestParam String query) {
-        List<Student> results = studentRepository.findByNameContainingIgnoreCaseOrStudentIdContainingIgnoreCase(query, query);
+        List<Student> results = studentRepository.findByNameContainingIgnoreCaseOrStudentIdContainingIgnoreCase(query,
+                query);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
-    // 4. UPDATE
+    // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<String> updateStudent(@PathVariable String id, @RequestBody Student updatedStudent) {
         if (!studentRepository.existsById(id)) {
@@ -62,7 +62,7 @@ public class StudentController {
         return new ResponseEntity<>("Profile updated successfully.", HttpStatus.OK);
     }
 
-    // 5. DELETE
+    // DELETE
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable String id) {
         if (studentRepository.existsById(id)) {

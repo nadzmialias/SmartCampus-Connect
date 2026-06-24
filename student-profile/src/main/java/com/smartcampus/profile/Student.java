@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "students")
 public class Student {
-    
+
     @Id
     @Column(name = "student_id", nullable = false, unique = true)
     private String studentId;
@@ -19,7 +19,6 @@ public class Student {
     @Column(name = "faculty")
     private String faculty;
 
-    // Getters and Setters
     public String getStudentId() {
         return studentId;
     }

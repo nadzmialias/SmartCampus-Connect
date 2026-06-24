@@ -19,10 +19,11 @@ public class CxfConfig {
     @Bean
     public Endpoint endpoint() {
         EndpointImpl endpoint = new EndpointImpl(bus, librarySoapService);
-        
-        // This publishes our service WSDL at http://localhost:8083/services/booking?wsdl
-        endpoint.publish("/booking"); 
-        
+
+        // This publishes our service WSDL at
+        // http://localhost:8083/services/booking?wsdl
+        endpoint.publish("/booking");
+
         return endpoint;
     }
 }

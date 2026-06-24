@@ -7,6 +7,5 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, String> {
-    // Spring Boot automatically writes the SQL for this based on the method name!
     List<Student> findByNameContainingIgnoreCaseOrStudentIdContainingIgnoreCase(String name, String studentId);
 }
