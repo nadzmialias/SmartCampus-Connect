@@ -66,6 +66,7 @@ public class EnrolmentController {
                 return new ResponseEntity<>("Enrolment failed: Invalid request to Profile Service.",
                         HttpStatus.BAD_REQUEST);
             } catch (ResourceAccessException e) {
+                System.out.println("FAILURE HANDLING TRIGGERED: Profile Service is offline. " + e.getMessage());
                 return new ResponseEntity<>("Enrolment failed: Profile Service offline.",
                         HttpStatus.SERVICE_UNAVAILABLE);
 
