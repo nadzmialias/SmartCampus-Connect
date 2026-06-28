@@ -102,7 +102,7 @@ public class EnrolmentController {
                 }
             });
 
-            return new ResponseEntity<>("Success: " + studentId + enrolled in " + course.getName() + ".",
+            return new ResponseEntity<>("Success: " + studentId + "enrolled in " + course.getName() + ".",
                     HttpStatus.OK);
         } finally {
             enrolLock.unlock();
