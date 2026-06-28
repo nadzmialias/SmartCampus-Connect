@@ -6,7 +6,7 @@ SmartCampus Connect is a fault-tolerant, event-driven microservices architecture
 
 ## 🏗️ Architecture Overview
 
-The system moves away from a tightly coupled monolith to a distributed architecture using Java Spring Boot, MySQL/MariaDB (Database-per-Service pattern), and Apache ActiveMQ (Asynchronous Choreography).
+The system moves away from a tightly coupled monolith to a distributed architecture using Java Spring Boot, MariaDB (Database-per-Service pattern), and Apache ActiveMQ (Asynchronous Choreography).
 
 **Core Microservices**
 *   **Student Profile Service (Port 8081):** REST API for managing student demographics.
@@ -23,31 +23,26 @@ The system moves away from a tightly coupled monolith to a distributed architect
 To run this project on a clean machine, ensure you have the following installed:
 *   **Java 17 (JDK)**
 *   **Apache Maven**
-*   **MySQL/MariaDB** running on Port `3306` (via XAMPP or local install)
-*   **Docker Desktop** (Must be running for the ActiveMQ broker)
+*   **Docker Desktop** (Must be running for the Database and ActiveMQ broker)
 *   **Postman** (For API testing)
 
 ### Step 1: Start the Infrastructure
-This project relies on Docker to instantly provision the Apache ActiveMQ message broker.
+This project relies on Docker to provision the MariaDB database and the Apache ActiveMQ message broker.
 Open your terminal at the root of the repository and run:
 > `docker compose up -d`
-
-*(Ensure your local XAMPP/MariaDB server is also started).*
 
 ### Step 2: Build the Application
 We have provided a single-command build to compile all microservices into executable Spring Boot Fat JARs. Run the following command from the root directory:
 > `mvn clean install`
 
 ### Step 3: Launch the Services (One-Click)
-To facilitate rapid deployment, we have included a startup script that launches all five services simultaneously in their own isolated terminal windows.
+To facilitate rapid deployment, we have included a startup script that initializes the containers and launches all five services simultaneously in their own isolated terminal windows.
 
 **On Windows:**
 Double-click the `start-services.bat` file in the root directory, OR run it from your terminal:
 > `.\start-services.bat`
 
-Wait approximately 15 seconds for the Spring Boot ASCII logo to appear in all 5 windows, indicating the campus environment is fully online.
-
-*(Manual Fallback: You can also navigate into each folder's `target/` directory and run `java -jar [filename].jar`).*
+The script will automatically initialize the infrastructure and wait for all services to register before finalizing the launch.
 
 ---
 

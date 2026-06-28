@@ -1,6 +1,18 @@
 @echo off
 echo ===================================================
-echo   Starting SmartCampus Connect Microservices...
+echo   Initializing SmartCampus Infrastructure...
+echo ===================================================
+
+:: 1. Start Docker Containers
+echo Starting Docker services (Database and ActiveMQ)...
+docker compose up -d
+
+:: 2. Wait for services to initialize
+echo Waiting for infrastructure to initialize...
+timeout /t 10
+
+echo ===================================================
+echo   Launching Microservices...
 echo ===================================================
 
 start "Profile Service (8081)" cmd /k "cd student-profile\target && java -jar student-profile-1.0.0.jar"
@@ -9,6 +21,5 @@ start "Library Service (8083)" cmd /k "cd library-booking\target && java -jar li
 start "Notification Service (8084)" cmd /k "cd notification\target && java -jar notification-1.0.0.jar"
 start "Analytics Service (8085)" cmd /k "cd reporting-analytics\target && java -jar reporting-analytics-1.0.0.jar"
 
-echo Services are launching in separate windows.
-echo Please wait for the Spring Boot logo in each window.
+echo Services are launching.
 pause
