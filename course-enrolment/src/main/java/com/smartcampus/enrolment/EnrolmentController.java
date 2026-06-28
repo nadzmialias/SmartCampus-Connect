@@ -9,9 +9,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import jakarta.annotation.PreDestroy;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
@@ -22,9 +25,11 @@ import java.util.stream.Collectors;
 public class EnrolmentController {
 
     private final JmsTemplate jmsTemplate;
-    // private final RestTemplate restTemplate = new RestTemplate();
     private final RestTemplate restTemplate = createTimeoutRestTemplate();
     private final Lock enrolLock = new ReentrantLock();
+    
+    // Explicitly define the ExecutorService to satisfy R5
+    private final ExecutorService notificationExecutor = Executors.newFixedThreadPool(5);
 
     @Autowired
     private CourseRepository courseRepository;
@@ -87,9 +92,17 @@ public class EnrolmentController {
             courseRepository.save(course);
             enrolmentRecordRepository.save(new EnrolmentRecord(studentId, courseId));
 
-            jmsTemplate.convertAndSend("enrolmentQueue", "ENROLMENT_SUCCESS:" + studentId + ":" + courseId);
+            // Execute messaging asynchronously using the explicit thread pool
+            notificationExecutor.submit(() -> {
+                try {
+                    jmsTemplate.convertAndSend("enrolmentQueue", "ENROLMENT_SUCCESS:" + studentId + ":" + courseId);
+                    System.out.println("Async message sent by thread: " + Thread.currentThread().getName());
+                } catch (Exception e) {
+                    System.err.println("Failed to send async notification: " + e.getMessage());
+                }
+            });
 
-            return new ResponseEntity<>("Success: " + studentId + " enrolled in " + course.getName() + ".",
+            return new ResponseEntity<>("Success: " + studentId + "enrolled in " + course.getName() + ".",
                     HttpStatus.OK);
         } finally {
             enrolLock.unlock();
@@ -121,7 +134,15 @@ public class EnrolmentController {
         existing.setCapacity(newTotal);
         courseRepository.save(existing);
 
-        jmsTemplate.convertAndSend("enrolmentQueue", "SEAT_ALLOCATION:" + courseId + ":" + seatsToAdd + ":" + newTotal);
+        // Execute messaging asynchronously using the explicit thread pool
+        notificationExecutor.submit(() -> {
+            try {
+                jmsTemplate.convertAndSend("enrolmentQueue", "SEAT_ALLOCATION:" + courseId + ":" + seatsToAdd + ":" + newTotal);
+                System.out.println("Async message sent by thread: " + Thread.currentThread().getName());
+            } catch (Exception e) {
+                System.err.println("Failed to send async notification: " + e.getMessage());
+            }
+        });
 
         return new ResponseEntity<>(String.format("Seats Allocated: %s now has %d total seats.", courseId, newTotal),
                 HttpStatus.OK);
@@ -168,6 +189,13 @@ public class EnrolmentController {
             return new ResponseEntity<>("Course deleted.", HttpStatus.OK);
         }
         return new ResponseEntity<>("Course not found.", HttpStatus.NOT_FOUND);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        if (notificationExecutor != null && !notificationExecutor.isShutdown()) {
+            notificationExecutor.shutdown();
+        }
     }
 
     public static class EnrolmentRequest {
