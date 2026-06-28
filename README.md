@@ -1,7 +1,5 @@
 # **SmartCampus Connect**
 
-**Course:** BITP 3123 - Distributed Application Development
-
 SmartCampus Connect is a fault-tolerant, event-driven microservices architecture designed to handle high-concurrency university workflows, such as semester course registration, student profile management, and legacy library system integration.
 
 ---
@@ -41,7 +39,7 @@ We have provided a single-command build to compile all microservices into execut
 > `mvn clean install`
 
 ### Step 3: Launch the Services (One-Click)
-To fulfill the requirement for rapid deployment, we have included a startup script that launches all five services simultaneously in their own isolated terminal windows.
+To facilitate rapid deployment, we have included a startup script that launches all five services simultaneously in their own isolated terminal windows.
 
 **On Windows:**
 Double-click the `start-services.bat` file in the root directory, OR run it from your terminal:
@@ -63,15 +61,15 @@ We have included a complete Postman collection to easily test all service endpoi
 3. In Postman, ensure the collection variables point to your local machine (e.g., `profileAppUrl` = `http://localhost`, `profileAppPort` = `8081`, etc.).
 4. You can now run the pre-configured tests directly from the folders.
 
-**Synchronous REST & Graceful Degradation (Requirement R9)**
+**Synchronous REST & Graceful Degradation**
 Trigger the *Generate Snapshot Report* request in Service 4.
 *   **Failure Handling Test:** Terminate the Profile Service window (Port 8081) and trigger the report again. The Analytics service will gracefully catch the connection failure and return a safe `503 Service Unavailable` response instead of crashing.
 
-**SOAP Contract (Requirement R8)**
+**SOAP Contract**
 To verify the legacy SOAP integration, navigate to:
 > `http://localhost:8083/services/booking?wsdl`
 
-**Concurrency Load Testing (Requirement R5)**
+**Concurrency Load Testing**
 A pre-configured JMeter test plan (`DAD_project_test.jmx`) is included in the root directory.
 *   It is configured to simulate 50 concurrent students attempting to enrol in a course with a limited capacity of 5 seats at the exact same millisecond.
 *   Running this test proves the efficacy of the `ReentrantLock` mechanism, resulting in exactly 5 successes (`200 OK`) and 45 safely rejected conflicts (`409 Conflict`).
